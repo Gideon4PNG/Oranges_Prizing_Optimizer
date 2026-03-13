@@ -1,0 +1,69 @@
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Profit Optimizer (mini UI)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; max-width: 720px; }
+    label { display:block; margin-top:10px; }
+    input { width: 160px; padding: 6px; }
+    button { margin-top: 16px; padding: 8px 14px; }
+    pre { background:#111; color:#eee; padding:10px; overflow:auto; }
+    .row { display:flex; gap:16px; flex-wrap:wrap; }
+  </style>
+</head>
+<body>
+  <h1>Profit Optimizer</h1>
+  <div class="row">
+    <div>
+      <label>promo (0/1)<br><input id="promo" type="number" value="0" /></label>
+      <label>comp_price<br><input id="comp_price" type="number" step="0.01" value="1.18" /></label>
+      <label>temp_c<br><input id="temp_c" type="number" step="0.1" value="22.0" /></label>
+      <label>dow (0=Mon..6=Sun)<br><input id="dow" type="number" value="3" /></label>
+      <label>month (1..12)<br><input id="month" type="number" value="8" /></label>
+    </div>
+    <div>
+      <label>lag_1<br><input id="lag_1" type="number" value="340" /></label>
+      <label>lag_7<br><input id="lag_7" type="number" value="360" /></label>
+      <label>roll7_mean<br><input id="roll7_mean" type="number" value="350" /></label>
+      <label>unit_cost<br><input id="unit_cost" type="number" step="0.01" value="0.65" /></label>
+      <label>pmin / pmax / step<br>
+        <input id="pmin" type="number" step="0.01" value="0.90" />
+        <input id="pmax" type="number" step="0.01" value="1.30" />
+        <input id="step" type="number" step="0.01" value="0.01" />
+      </label>
+    </div>
+  </div>
+  <button onclick="optimize()">Optimize Price</button>
+
+  <h3>Response</h3>
+  <pre id="out">{}</pre>
+
+  <script>
+    async function optimize() {
+      const payload = {
+        promo: parseInt(document.getElementById('promo').value),
+        comp_price: parseFloat(document.getElementById('comp_price').value),
+        temp_c: parseFloat(document.getElementById('temp_c').value),
+        dow: parseInt(document.getElementById('dow').value),
+        month: parseInt(document.getElementById('month').value),
+        lag_1: parseFloat(document.getElementById('lag_1').value),
+        lag_7: parseFloat(document.getElementById('lag_7').value),
+        roll7_mean: parseFloat(document.getElementById('roll7_mean').value),
+        unit_cost: parseFloat(document.getElementById('unit_cost').value),
+        pmin: parseFloat(document.getElementById('pmin').value),
+        pmax: parseFloat(document.getElementById('pmax').value),
+        step: parseFloat(document.getElementById('step').value)
+      };
+      const r = await fetch('http://127.0.0.1:8000/optimize_price', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const j = await r.json();
+      document.getElementById('out').textContent = JSON.stringify(j, null, 2);
+    }
+  </script>
+</body>
+</html>
