@@ -8,6 +8,6 @@ model in a reproducible scikit‑learn pipeline, and validate it with a time‑a
 
 To make the work usable, I deployed the trained model behind a FastAPI service and added a tiny HTML interface so anyone can input market 
 conditions and instantly see the recommended price and expected profit. Although the first demo uses orange sales, the approach is product‑agnostic—it
-can be retrained for any produce or SKU as long as historical sales and pricing data are available. I used Copilot as an assistant for iteration and debugging, 
+can be retrained for any produce as long as historical sales and pricing data are available. I used Copilot as an assistant for iteration and debugging, 
 but the problem framing, design choices, and trade‑offs were mine. Note: the dataset in this demo is synthetic and Copilot‑generated, used purely for 
 learning and prototyping.
